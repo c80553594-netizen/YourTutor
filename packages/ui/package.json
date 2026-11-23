@@ -2,7 +2,7 @@
   "name": "@yourtutor/ui",
   "version": "0.1.0",
   "private": true,
-  "description": "Shared responsive UI package & AppBridge contract for YourTutor Desktop and Android",
+  "description": "Shared responsive React + Tailwind CSS + KaTeX UI package & AppBridge contract for YourTutor Desktop and Android",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -10,13 +10,29 @@
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
-    }
+    },
+    "./styles.css": "./src/styles/theme.css"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@yourtutor/core": "workspace:*"
+    "@yourtutor/core": "workspace:*",
+    "katex": "^0.16.21",
+    "lucide-react": "^0.487.0",
+    "qrcode": "^1.5.4"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/katex": "^0.16.7",
+    "@types/qrcode": "^1.5.5",
+    "@types/react": "^19.0.12",
+    "@types/react-dom": "^19.0.4",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
   }
 }

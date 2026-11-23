@@ -4,3 +4,5 @@ packages:
 
 allowBuilds:
   esbuild: true
+  electron: false
+  electron-winstaller: false

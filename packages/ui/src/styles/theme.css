@@ -1,0 +1,125 @@
+@import "tailwindcss";
+@import "katex/dist/katex.min.css";
+
+/* ============================================================================
+ * YourTutor Design Tokens (Single Source of Truth for Desktop & Android UI)
+ * Edit these CSS Variables to re-skin both Desktop and Android simultaneously.
+ * ============================================================================ */
+:root {
+  --yt-bg-primary: #f7f8fa;
+  --yt-bg-surface: #ffffff;
+  --yt-bg-elevated: #f1f5f9;
+  --yt-border: #e2e8f0;
+  --yt-border-strong: #cbd5e1;
+
+  --yt-text-primary: #0f172a;
+  --yt-text-secondary: #475569;
+  --yt-text-muted: #64748b;
+
+  /* Academic Emerald-Teal Accent (calm, legible, high-focus) */
+  --yt-accent: #0f766e;
+  --yt-accent-hover: #0d5f59;
+  --yt-accent-soft: #ccfbf1;
+  --yt-accent-foreground: #ffffff;
+
+  /* Mastery Status Semantic Tokens */
+  --yt-mastery-weak: #dc2626;
+  --yt-mastery-weak-bg: #fef2f2;
+  --yt-mastery-consolidating: #d97706;
+  --yt-mastery-consolidating-bg: #fffbeb;
+  --yt-mastery-mastered: #059669;
+  --yt-mastery-mastered-bg: #ecfdf5;
+
+  /* Radii & Spacing */
+  --yt-radius-card: 12px;
+  --yt-radius-control: 8px;
+  --yt-space-unit: 4px;
+
+  /* Typography */
+  --yt-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Noto Sans SC',
+    'Segoe UI', sans-serif;
+  --yt-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Mobile Safe Areas (Capacitor Android / iOS WebView) */
+  --yt-safe-top: env(safe-area-inset-top, 0px);
+  --yt-safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+[data-theme='dark'] {
+  --yt-bg-primary: #0b1120;
+  --yt-bg-surface: #111827;
+  --yt-bg-elevated: #1e293b;
+  --yt-border: #1f2937;
+  --yt-border-strong: #334155;
+
+  --yt-text-primary: #f1f5f9;
+  --yt-text-secondary: #cbd5e1;
+  --yt-text-muted: #94a3b8;
+
+  --yt-accent: #14b8a6;
+  --yt-accent-hover: #0d9488;
+  --yt-accent-soft: #134e4a;
+  --yt-accent-foreground: #042f2e;
+
+  --yt-mastery-weak: #f87171;
+  --yt-mastery-weak-bg: #450a0a;
+  --yt-mastery-consolidating: #fbbf24;
+  --yt-mastery-consolidating-bg: #451a03;
+  --yt-mastery-mastered: #34d399;
+  --yt-mastery-mastered-bg: #064e3b;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: var(--yt-bg-primary);
+  color: var(--yt-text-primary);
+  font-family: var(--yt-font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Prevent wide KaTeX equations from overflowing mobile portrait screens */
+.yt-math-block {
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100%;
+  padding: 0.5rem 0.25rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+.yt-math-inline .katex {
+  font-size: 1.02em;
+}
+
+.yt-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  margin: 0.75rem 0;
+  display: block;
+  overflow-x: auto;
+}
+
+.yt-prose th,
+.yt-prose td {
+  border: 1px solid var(--yt-border);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.yt-prose th {
+  background-color: var(--yt-bg-elevated);
+  font-weight: 600;
+}
+
+.yt-safe-pb {
+  padding-bottom: calc(0.5rem + var(--yt-safe-bottom));
+}
+
+.yt-safe-pt {
+  padding-top: var(--yt-safe-top);
+}

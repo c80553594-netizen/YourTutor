@@ -1,0 +1,44 @@
+appId: com.yourtutor.desktop
+productName: YourTutor
+copyright: Copyright © 2026 YourTutor Contributors
+asar: true
+npmRebuild: true
+
+directories:
+  output: release
+
+files:
+  - dist/**/*
+  - dist-electron/**/*
+  - package.json
+
+extraMetadata:
+  main: dist-electron/main/main.js
+
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+  artifactName: YourTutor-${version}-win-${arch}.${ext}
+
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+
+mac:
+  category: public.app-category.education
+  target:
+    - target: dmg
+      arch:
+        - arm64
+        - x64
+  artifactName: YourTutor-${version}-mac-${arch}.${ext}
+
+linux:
+  category: Education
+  target:
+    - target: AppImage
+      arch:
+        - x64
+  artifactName: YourTutor-${version}-linux-${arch}.${ext}
