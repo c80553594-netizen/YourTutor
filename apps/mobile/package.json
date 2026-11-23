@@ -1,0 +1,18 @@
+{
+  "name": "@yourtutor/mobile",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Capacitor Android shell for YourTutor (Phase 3 scaffold)",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@yourtutor/core": "workspace:*",
+    "@yourtutor/storage": "workspace:*",
+    "@yourtutor/ui": "workspace:*"
+  }
+}

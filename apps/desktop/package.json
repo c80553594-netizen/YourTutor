@@ -1,0 +1,20 @@
+{
+  "name": "@yourtutor/desktop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Electron desktop shell & Companion Bridge server for YourTutor (Phase 2 scaffold)",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "dev:web": "node -e \"console.log('[YourTutor] Phase 1 scaffold: web preview server will be implemented in Phase 2.')\"",
+    "dev:desktop": "node -e \"console.log('[YourTutor] Phase 1 scaffold: Electron desktop shell will be implemented in Phase 2.')\"",
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@yourtutor/core": "workspace:*",
+    "@yourtutor/storage": "workspace:*",
+    "@yourtutor/ui": "workspace:*"
+  }
+}
