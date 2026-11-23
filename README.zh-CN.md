@@ -1,6 +1,6 @@
 # YourTutor（AI 考题反推高分私教）
 
-> 面向考生的开源、跨平台（Windows / macOS / Linux / Android）、本地优先（Local-First）学习应用。支持 **Antigravity CLI**、**OpenAI Codex CLI**、**Claude Code CLI**、主流官方模型 API、任意 OpenAI-Compatible 接口以及安卓端 **Companion Bridge** 伴侣桥接。
+> 面向考生的开源、跨平台（**Windows / macOS / Linux / Android**）、本地优先（Local-First）学习应用。支持 **Antigravity CLI**、**OpenAI Codex CLI**、**Claude Code CLI**、主流官方模型 API、任意 OpenAI-Compatible 接口以及安卓端 **Companion Bridge** 伴侣扫码桥接。
 
 [English README](./README.md) | [贡献指南](./CONTRIBUTING.md) | [MIT 开源协议](./LICENSE)
 
@@ -8,7 +8,7 @@
 
 ## 核心教学闭环
 
-收到考题（文本或拍照）后，**YourTutor** 不会直接扔答案了事，而是通过四个独立可测的教研引擎模块完成闭环提分：
+收到考题（文本、桌面截图或手机拍照）后，**YourTutor** 不会直接扔答案了事，而是通过四个独立可测的教研引擎模块完成闭环提分：
 
 1. **阶段一：考题 4 维深度反推（`ReverseEngineerService`）**
    - 核心考点剥离与权重标注（高频必考 / 拉分区分点 / 基础送分点）
@@ -28,43 +28,36 @@
 
 ---
 
-## Monorepo 目录架构
+## Monorepo 目录架构（桌面与安卓 95%+ 代码复用）
 
 ```text
 YourTutor/
 ├── packages/
 │   ├── core/        # 纯 TypeScript 核心引擎：多 Provider 网关、4 大教研服务、Prompt Pack 与 Zod Schema
 │   ├── storage/     # Drizzle ORM + 跨端 SqlDriver 抽象 + 自动增量 SQLite Migration + 7 表 Repository
-│   └── ui/          # 桌面与安卓共享 UI 契约（AppBridge、ToolPanelRegistry、CSS Design Tokens）
+│   └── ui/          # 桌面与安卓共享 React + Tailwind CSS + KaTeX 响应式界面、AppBridge 与 Design Tokens
 ├── apps/
-│   ├── desktop/     # Electron 桌面外壳与可选 Companion Bridge 本地伴侣服务（阶段二实现）
-│   └── mobile/      # Capacitor Android 原生外壳、拍题与扫码伴侣桥接（阶段三实现）
+│   ├── desktop/     # Electron 桌面外壳、safeStorage 密钥库、Companion Bridge 伴侣服务与 dev:web 云端预览
+│   └── mobile/      # Capacitor 7 Android 原生外壳、拍照识题、Android Keystore 插件与跨端同步
 └── docs/            # 核心教研主提示词与三阶段开发指南
 ```
 
-### 多 Provider 网关矩阵
+---
 
-| Provider 适配器                | 运行能力声明       | 接入方式                                                                     | 多模态识图 | 说明                                                             |
-| ------------------------------ | ------------------ | ---------------------------------------------------------------------------- | ---------- | ---------------------------------------------------------------- |
-| **Antigravity CLI** (`agy`)    | `desktop-cli`      | 隔离沙箱 NDJSON（`agy -p --output-format stream-json`）                      | —          | 支持 `--model` 与 `--effort`                                     |
-| **OpenAI Codex CLI** (`codex`) | `desktop-cli`      | 隔离沙箱 JSONL（`codex exec --json --sandbox read-only`）                    | —          | 强制只读沙箱 + 空临时工作目录                                    |
-| **Claude Code CLI** (`claude`) | `desktop-cli`      | 隔离沙箱 NDJSON（`claude -p --output-format stream-json --bare --tools ""`） | —          | 禁用所有工具 + 空临时工作目录                                    |
-| **OpenAI-Compatible**          | `universal-api`    | 标准 HTTP / SSE                                                              | 支持       | 覆盖 OpenAI、DeepSeek、Qwen、OpenRouter、Ollama、LM Studio、vLLM |
-| **Anthropic API**              | `universal-api`    | 官方 Messages SSE API                                                        | 支持       | 支持思考流与图片输入                                             |
-| **Google Gemini API**          | `universal-api`    | 官方 Gemini SSE API                                                          | 支持       | Header 传密钥（避免 URL 泄漏）+ 思考流 + 识图                    |
-| **Companion Bridge**           | `companion-remote` | HTTP / SSE + Bearer 配对 Token                                               | 支持       | 供 Android 端安全复用桌面/服务器本地订阅并同步学情档案           |
+## Android 端特色与伴侣扫码配对指南
+
+- **拍照识题 / 相册选图**：在考题导入页直接点击「拍照识题」或「相册选图」，客户端自动完成轻量压缩与方向矫正后送入多模态模型反推考点。
+- **双模式模型接入**：
+  1. **独立模式（无需电脑）**：直接在手机端配置 Gemini / OpenAI / Anthropic / DeepSeek / OpenRouter / 任意 OpenAI-Compatible API（密钥经原生 `YourTutorKeystorePlugin` 调用 Android Keystore AES-256-GCM 加密，绝不存明文 `localStorage`）。
+  2. **伴侣桥接模式（复用本机 CLI 订阅）**：
+     - 在桌面端打开 **设置 → 伴侣桥接（手机连接）**，手动开启本地 Companion Bridge 服务（默认关闭），界面自动生成局域网地址、随机配对 Token 与二维码；
+     - 在 Android 端扫码或粘贴配对链接（`yourtutor://pair?...` / JSON），即可直接拉取并流式调用桌面端的 **Antigravity / Codex / Claude Code** 订阅；
+     - 点击「一键同步学习档案」，基于时间戳冲突安全策略在桌面与手机间合并同步课程、学情掌握度与防坑口诀。
+- **移动端体验优化**：底部四 Tab 触控导航、Android 安全区适配、系统返回键路由、软键盘 `adjustResize` 防遮挡以及超宽 KaTeX 公式横向平滑滚动。
 
 ---
 
-## 安全与合规底线
-
-- **100% 官方通道**：绝不破解、窃取或伪造私有 OAuth Token 与未公开接口。
-- **CLI 安全沙箱**：每次调用 `agy` / `codex` / `claude` 均在独立空临时目录运行并自动清理，严格禁用文件写入与 Shell 工具。
-- **密钥加密引用**：持久化层 `provider_configs` 拒绝存储任何明文 API Key / Token，仅保存系统钥匙串 / Android Keystore 的 `secretRef`。
-
----
-
-## 快速开发验证
+## 快速开发、云端预览与四端发版
 
 环境要求：**Node.js >= 22**、**pnpm >= 9**。
 
@@ -76,11 +69,20 @@ pnpm lint
 pnpm test
 ```
 
-## 开源路线图
-
-- [x] **阶段一**：Monorepo 工程骨架、统一多 Provider 网关、跨端 Drizzle SQLite 持久化层、4 大教研引擎与单元测试
-- [ ] **阶段二**：共享响应式界面 `packages/ui`、Electron 桌面端、Companion Bridge 服务、`dev:web` 云端预览与桌面三端打包
-- [ ] **阶段三**：Capacitor Android 端、拍照识题、伴侣扫码桥接、跨端同步与云端 APK 自动构建
+- **纯浏览器云端预览（内置桌面视图 / 390×844 手机视口一键切换）**：
+  ```bash
+  pnpm dev:web
+  ```
+- **Electron 桌面端运行**：
+  ```bash
+  pnpm dev:desktop
+  ```
+- **触发 `v0.1.0` 云端四端自动发版（Windows `.exe` / macOS `.dmg` / Linux `.AppImage` / Android `.apk`）**：
+  ```bash
+  git tag v0.1.0
+  git push origin v0.1.0
+  ```
+  或在 GitHub 仓库 **Actions → Release → Run workflow** 手动触发。若未配置 `ANDROID_KEYSTORE_BASE64` 等签名 Secrets，Android Job 会自动回退产出可安装的开源签名 APK，不阻塞任何 Fork 仓库发版。
 
 ## 开源协议
 

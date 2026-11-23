@@ -10,6 +10,14 @@ out/
 release/
 *.tsbuildinfo
 
+# Capacitor / Android generated build outputs
+apps/mobile/android/.gradle/
+apps/mobile/android/build/
+apps/mobile/android/app/build/
+apps/mobile/android/local.properties
+apps/mobile/android/app/src/main/assets/public/
+apps/mobile/android/capacitor-cordova-android-plugins/build/
+
 # Test & coverage
 coverage/
 
