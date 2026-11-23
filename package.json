@@ -1,0 +1,34 @@
+{
+  "name": "yourtutor",
+  "version": "0.1.0",
+  "private": true,
+  "description": "YourTutor — AI reverse-engineering exam tutor supporting Antigravity, Codex, Claude Code & LLM APIs",
+  "license": "MIT",
+  "type": "module",
+  "packageManager": "pnpm@12.21.0",
+  "engines": {
+    "node": ">=22.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "scripts": {
+    "dev:web": "pnpm --filter @yourtutor/desktop dev:web",
+    "dev:desktop": "pnpm --filter @yourtutor/desktop dev:desktop",
+    "build": "pnpm -r --workspace-concurrency=1 build",
+    "typecheck": "pnpm -r typecheck",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.24.0",
+    "@types/node": "^22.14.0",
+    "eslint": "^9.24.0",
+    "eslint-config-prettier": "^10.1.1",
+    "prettier": "^3.5.3",
+    "typescript": "^5.8.2",
+    "typescript-eslint": "^8.29.0",
+    "vitest": "^3.1.1"
+  }
+}
