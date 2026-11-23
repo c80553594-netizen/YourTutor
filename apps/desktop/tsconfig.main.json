@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist-electron",
+    "composite": true
+  },
+  "references": [
+    { "path": "../../packages/core" },
+    { "path": "../../packages/storage" },
+    { "path": "../../packages/ui" }
+  ],
+  "include": ["src/index.ts", "src/main/**/*.ts", "src/__tests__/**/*.ts"],
+  "exclude": ["dist", "dist-electron", "node_modules"]
+}
